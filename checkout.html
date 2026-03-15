@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout - Aesthetic Care</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="products.js"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+<header>
+  <img src="logo.png" alt="Aesthetic Care Logo" class="logo">
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+    <a href="shop.html">Shop</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<section class="shop-section">
+  <h2>Checkout</h2>
+  <form id="checkoutForm">
+    <h3>Customer Info</h3>
+    <input type="email" id="checkoutEmail" placeholder="Email" required>
+    <input type="text" id="checkoutName" placeholder="Name" required>
+    <input type="tel" id="checkoutPhone" placeholder="Phone Number" required>
+    <input type="text" id="checkoutAddress" placeholder="Address" required>
+    <input type="text" id="checkoutCity" placeholder="City" required>
+    <input type="text" id="checkoutProvince" placeholder="Province" required>
+    <textarea id="checkoutNotes" placeholder="Order Notes (Optional)"></textarea>
+
+    <h3>Your Order</h3>
+    <div id="orderSummary"></div>
+
+    <p>Shipment Charges: PKR 250</p>
+    <label>
+      <input type="radio" name="payment" value="Cash on Delivery" required> Cash on Delivery
+    </label>
+    <label>
+      <input type="radio" name="payment" value="EasyPaisa" required> EasyPaisa
+    </label>
+
+    <button type="submit">Place Order</button>
+  </form>
+</section>
+
+<script>
+  // Display Order Summary
+  const orderDiv = document.getElementById('orderSummary');
+  let total = 0;
+  cart.forEach(item => {
+    const product = products.find(p=>p.id===item.id);
+    const subtotal = product.price*item.qty;
+    total += subtotal;
+    const p = document.createElement('p');
+    p.textContent = `${product.name} x${item.qty} - PKR ${subtotal}`;
+    orderDiv.appendChild(p);
+  });
+  const grandTotal = total + 250;
+  const totalP = document.createElement('p');
+  totalP.innerHTML = `<strong>Grand Total: PKR ${grandTotal}</strong>`;
+  orderDiv.appendChild(totalP);
+
+  // Checkout Form Submission
+  document.getElementById('checkoutForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('checkoutName').value;
+    const phone = document.getElementById('checkoutPhone').value;
+    const email = document.getElementById('checkoutEmail').value;
+    const address = document.getElementById('checkoutAddress').value;
+    const city = document.getElementById('checkoutCity').value;
+    const province = document.getElementById('checkoutProvince').value;
+    const notes = document.getElementById('checkoutNotes').value;
+    const payment = document.querySelector('input[name="payment"]:checked').value;
+
+    let orderText = `New Order – Aesthetic Care\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nAddress: ${address}, ${city}, ${province}\nNotes: ${notes}\nPayment: ${payment}\nProducts:\n`;
+    cart.forEach(item=>{
+      const product = products.find(p=>p.id===item.id);
+      orderText += `${product.name} x${item.qty} - PKR ${product.price*item.qty}\n`;
+      product.stock -= item.qty; // Reduce stock
+    });
+    orderText += `Shipment Charges: PKR 250\nGrand Total: PKR ${grandTotal}`;
+
+    // Send Email
+    window.location.href = `mailto:AestheticCare002@gmail.com?subject=New Order&body=${encodeURIComponent(orderText)}`;
+    // Send WhatsApp
+    window.open(`https://api.whatsapp.com/send?phone=+923367381545&text=${encodeURIComponent(orderText)}`, '_blank');
+
+    alert("Order Placed!");
+    cart.length = 0; // Empty cart
+    window.location.href = "shop.html";
+  });
+</script>
+
+<footer>
+  <p>&copy; 2026 Aesthetic Care | WhatsApp: 03367381545 | Email: AestheticCare002@gmail.com</p>
+</footer>
+</body>
+</html>
