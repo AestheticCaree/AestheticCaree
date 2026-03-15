@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shop - Aesthetic Care</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="products.js"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+<header>
+  <img src="logo.png" alt="Aesthetic Care Logo" class="logo">
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+    <a href="shop.html">Shop</a>
+    <a href="contact.html">Contact</a>
+    <a href="cart.html">Cart 🛒</a>
+  </nav>
+</header>
+
+<section class="shop-section">
+  <h2>Shop Products</h2>
+
+  <!-- Search Bar -->
+  <input type="text" id="searchInput" placeholder="Search Products" onkeyup="searchProducts()">
+
+  <!-- Product List -->
+  <div id="productList">
+    <!-- Products will be displayed here dynamically -->
+    <script>
+      const container = document.getElementById('productList');
+      products.forEach(p=>{
+        const div = document.createElement('div');
+        div.innerHTML = `
+          <p><strong>${p.name}</strong> - PKR ${p.price} - Stock: ${p.stock}</p>
+          <button onclick="addToCart(${p.id})" ${p.stock===0?'disabled':''}>Add to Cart</button>
+        `;
+        container.appendChild(div);
+      });
+    </script>
+  </div>
+
+  <!-- Request Product Section -->
+  <h3>Can't find your product? Request it here!</h3>
+  <form id="requestForm">
+    <input type="text" id="reqName" placeholder="Your Name" required>
+    <input type="tel" id="reqPhone" placeholder="Phone Number" required>
+    <input type="text" id="reqProduct" placeholder="Product You Want" required>
+    <button type="submit">Request Product</button>
+  </form>
+</section>
+
+<footer>
+  <p>&copy; 2026 Aesthetic Care | WhatsApp: 03367381545 | Email: AestheticCare002@gmail.com</p>
+</footer>
+</body>
+</html>
